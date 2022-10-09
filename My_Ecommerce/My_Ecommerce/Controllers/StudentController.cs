@@ -5,20 +5,9 @@ namespace My_Ecommerce.Controllers
 {
     public class StudentController : Controller
     {
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
-        public string Index ()
+        public IActionResult Index()
         {
-            return "Default Action";
-        } 
-
-        public string Welcome(string name, int numTimes = 1)
-        {
-            var data = HtmlEncoder.Default.Encode($"hello {name}, numtimes is: {numTimes}");
-            return data;
+            return View();
         }
     }
 }
