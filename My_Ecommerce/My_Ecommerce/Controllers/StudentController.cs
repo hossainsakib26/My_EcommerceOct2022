@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Encodings.Web;
 
 namespace My_Ecommerce.Controllers
 {
@@ -14,9 +15,10 @@ namespace My_Ecommerce.Controllers
             return "Default Action";
         } 
 
-        public string Welcome()
+        public string Welcome(string name, int numTimes = 1)
         {
-            return "Welcome Actoon";
+            var data = HtmlEncoder.Default.Encode($"hello {name}, numtimes is: {numTimes}");
+            return data;
         }
     }
 }
