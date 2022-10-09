@@ -8,7 +8,7 @@ namespace My_Ecommerce.Models.PracticeModel
         public long ID { get; set; }
         public String Name { get; set; }
         public string Address { get; set; }
-        public DateOnly? Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
         public int? Gender { get; set; }
 
         //common property

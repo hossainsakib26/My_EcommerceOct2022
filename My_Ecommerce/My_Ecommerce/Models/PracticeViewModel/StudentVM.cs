@@ -9,7 +9,8 @@ namespace My_Ecommerce.Models.PracticeViewModel
         public string Name { get; set; }
         [StringLength(100)]
         public string Address { get; set; }
-        public DateOnly? Birthday { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? Birthday { get; set; }
         public int? Gender { get; set; }
 
         //common property
