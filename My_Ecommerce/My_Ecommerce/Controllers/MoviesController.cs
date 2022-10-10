@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using My_Ecommerce.DBContext;
 using My_Ecommerce.Models.PracticeModel;
-using My_Ecommerce.Repository;
 
 namespace My_Ecommerce.Controllers
 {
@@ -22,13 +16,19 @@ namespace My_Ecommerce.Controllers
             //_repository = repository;
         }
 
-        // GET: Movies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchText)
         {
-              return View(await _context.Movie.ToListAsync());
+            var datalist = _context.Movie;
+            var movies = from m in datalist select m;
+
+            if (!String.IsNullOrEmpty(searchText))
+            {
+                movies = movies.Where(s => s.Title!.Contains(searchText));
+            }
+
+            return View(await movies.ToListAsync());
         }
 
-        // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             var datalist = await _context.Movie.ToListAsync();
@@ -49,15 +49,11 @@ namespace My_Ecommerce.Controllers
             return View(movie);
         }
 
-        // GET: Movies/Create
         public IActionResult Create()
         {
             return View();
         }
-
-        // POST: Movies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movie movie)
@@ -74,7 +70,7 @@ namespace My_Ecommerce.Controllers
         // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -87,9 +83,6 @@ namespace My_Ecommerce.Controllers
             return View(movie);
         }
 
-        // POST: Movies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Movie movie)
@@ -122,16 +115,14 @@ namespace My_Ecommerce.Controllers
             return View(movie);
         }
 
-        // GET: Movies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
                 return NotFound();
@@ -140,16 +131,17 @@ namespace My_Ecommerce.Controllers
             return View(movie);
         }
 
-        // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Movie == null)
+            var movie = await _context.Movie.FindAsync(id);
+            if (movie == null)
             {
                 return Problem("Entity set 'EcommerceDbContext.Movie'  is null.");
             }
-            var movie = await _context.Movie.FindAsync(id);
+
+
             if (movie != null)
             {
                 _context.Movie.Remove(movie);
