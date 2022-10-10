@@ -9,7 +9,8 @@ namespace My_Ecommerce.DBContext
 {
     public class EcommerceDbContext : DbContext
     {
-        public EcommerceDbContext(DbContextOptions<EcommerceDbContext> options) : base(options)
+        public EcommerceDbContext(DbContextOptions<EcommerceDbContext> options) 
+            : base(options)
         {
 
         }
